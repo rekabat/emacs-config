@@ -1,4 +1,4 @@
 emacs-config
 ============
 
-My person Emacs config.
+My personal Emacs configuration files.
