@@ -1,0 +1,6 @@
+#ignore all temp files
+*~
+\#*#
+
+#ignore certain directories
+auto-save-list
