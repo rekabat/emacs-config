@@ -1,7 +1,11 @@
-;; initialize the package manager "melpa"
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load package managers
+;; Install packaged
+;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
 ;; refresh contents if need be
@@ -11,8 +15,10 @@
 ;; define a list of all the packages of interest
 (defvar packages-to-get
   '(;; themes
-    zenburn-theme
+;;    zenburn-theme
     solarized-theme
+;;    color-theme-monokai
+;;    monokai-theme
    )
 )
 
@@ -26,8 +32,8 @@
 ;; Package configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; load the appropriate imported package theme
-(load-theme 'solarized-light t)
+;; load the appropriate imported package theme. I like: Misterioso, Whiteboard, wombat, solarized-light, solarized-dark, zenburn
+(load-theme 'solarized-dark t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -36,6 +42,8 @@
 
 ;; turn off the blinking cursor
 (blink-cursor-mode 0)
+;; turn off the alert bell and make it display a square on the screen
+(setq visible-bell t)
 ;; turn off the useless toolbar in GUI mode
 (if window-system (tool-bar-mode 0))
 
