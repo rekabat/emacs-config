@@ -12,6 +12,7 @@
 (defvar packages-to-get
   '(;; themes
     zenburn-theme
+    solarized-theme
    )
 )
 
@@ -20,8 +21,32 @@
   (when (not (package-installed-p package))
     (package-install package)))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package configuration
+;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; load the appropriate imported package theme
-(load-theme 'zenburn t)
+(load-theme 'solarized-light t)
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Disable annoyances
+;;;;;;;;;;;;;;;;;;;;;
 
 ;; turn off the blinking cursor
 (blink-cursor-mode 0)
+;; turn off the useless toolbar in GUI mode
+(if window-system (tool-bar-mode 0))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Enable helpful features
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; display the column number
+(setq column-number-mode t)
+;; display line numbers in left column
+(global-linum-mode 1)
+;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
+(global-set-key "\C-t" 'goto-line)
