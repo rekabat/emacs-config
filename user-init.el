@@ -58,3 +58,13 @@
 (global-linum-mode 1)
 ;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
 (global-set-key "\C-t" 'goto-line)
+
+
+;;;;;;;;;;;;;;;;
+;; OS X specific
+;;;;;;;;;;;;;;;;
+
+(cond
+ ((eq system-type 'darwin)
+    (setq ns-alternate-modifier 'none)
+    (setq ns-command-modifier 'meta)))
