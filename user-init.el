@@ -15,10 +15,12 @@
 ;; define a list of all the packages of interest
 (defvar packages-to-get
   '(;; themes
-;;    zenburn-theme
     solarized-theme
-;;    color-theme-monokai
-;;    monokai-theme
+    ;;monokai-theme
+    ;;zenburn-theme
+
+    ;; Highlight nested parens, brackets, braces a different color at each depth.
+    rainbow-delimiters
    )
 )
 
@@ -35,6 +37,8 @@
 ;; load the appropriate imported package theme. I like: Misterioso, Whiteboard, wombat, solarized-light, solarized-dark, zenburn
 (load-theme 'solarized-dark t)
 
+;; activate rainbow delimiters in all modes
+(global-rainbow-delimiters-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Disable annoyances
@@ -56,6 +60,8 @@
 (setq column-number-mode t)
 ;; display line numbers in left column
 (global-linum-mode 1)
+;; highlight the line the cursor is currently on
+(global-hl-line-mode 1)
 ;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
 (global-set-key "\C-t" 'goto-line)
 
