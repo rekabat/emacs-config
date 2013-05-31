@@ -36,7 +36,6 @@
 
 ;; load the appropriate imported package theme. I like: Misterioso, Whiteboard, wombat, solarized-light, solarized-dark, zenburn
 (load-theme 'solarized-dark t)
-
 ;; activate rainbow delimiters in all modes
 (global-rainbow-delimiters-mode)
 
@@ -62,6 +61,10 @@
 (global-linum-mode 1)
 ;; highlight the line the cursor is currently on
 (global-hl-line-mode 1)
+;; start in an empty buffer instead of the help screen
+(setf inhibit-splash-screen t)
+(switch-to-buffer (get-buffer-create "empty"))
+;;(delete-other-windows)
 ;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
 (global-set-key "\C-t" 'goto-line)
 
