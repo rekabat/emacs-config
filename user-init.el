@@ -21,6 +21,15 @@
 
     ;; Highlight nested parens, brackets, braces a different color at each depth.
     rainbow-delimiters
+    
+    ;; M-x interface with Ido-style fuzzy matching.
+    smex
+
+    ;; All the packages necessary for auto-complete
+    ;; Visual Popup User Interface
+    popup
+    ;; Auto Completion for GNU Emacs
+    auto-complete
    )
 )
 
@@ -36,8 +45,20 @@
 
 ;; load the appropriate imported package theme. I like: Misterioso, Whiteboard, wombat, solarized-light, solarized-dark, zenburn
 (load-theme 'solarized-dark t)
+
 ;; activate rainbow delimiters in all modes
 (global-rainbow-delimiters-mode)
+
+;; activate smex and assign it to M-x instead of the default
+(smex-initialize) ; initializes at startup (not first use)
+(global-set-key "\M-x" 'smex)
+(global-set-key "\M-X" 'smex-major-mode-commands)
+(global-set-key "\C-c \C-c \M-x" 'execute-extended-command) ; the old M-x
+
+;; activate auto-complete
+(require 'auto-complete-config)
+(ac-config-default)
+
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Disable annoyances
