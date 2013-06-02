@@ -5,3 +5,6 @@
 #ignore certain directories
 auto-save-list
 elpa
+
+#ignore specific package files
+ac-comphist.dat

@@ -30,6 +30,9 @@
     popup
     ;; Auto Completion for GNU Emacs
     auto-complete
+
+    ;; switch to other buffers and files via popup.
+;    popup-switcher  ; also requires package "popup"
    )
 )
 
@@ -58,6 +61,10 @@
 ;; activate auto-complete
 (require 'auto-complete-config)
 (ac-config-default)
+
+;; set the popup switcher to be in the middle of the screen and set shortcut
+;(setq psw-in-window-center t)
+;(global-set-key "\C-;" 'psw-switch)
 
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -88,7 +95,9 @@
 ;;(delete-other-windows)
 ;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
 (global-set-key "\C-t" 'goto-line)
-
+;; add keyboard shortcuts for easily cycling between buffers
+(global-set-key (kbd "C-;") 'previous-buffer)
+(global-set-key (kbd "C-'") 'next-buffer)
 
 ;;;;;;;;;;;;;;;;
 ;; OS X specific
@@ -98,3 +107,16 @@
  ((eq system-type 'darwin)
     (setq ns-alternate-modifier 'none)
     (setq ns-command-modifier 'meta)))
+
+
+;;;;;;;;;;;;;;;;
+;; Personal libs
+;;;;;;;;;;;;;;;;
+
+;(load "~/.emacs.d/lib/buffer-cycle/buffer-cycle.el")
+;(setq psw-in-window-center t)
+;(global-set-key "\C-i" 'psw-switch)
+
+(load "~/.emacs.d/lib/buffer-cycle/new-bc.el")
+(bc-set-next-prev-keybinds (kbd "C-;") (kbd "C-'"))
+
