@@ -14,11 +14,12 @@ For package managers, I only use MELPA. I currently have installed:
 
 ## Disabled Features
 
-I have disable certain annoyances that are default in Emacs:
+I have disabled certain annoyances that are default in Emacs:
 
 - blinking cursor
 - audible bell
 - tool bar (in GUI mode)
+- C-x f (changed set line width to find file)
 
 ## Enabled Features
 
