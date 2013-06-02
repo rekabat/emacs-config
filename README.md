@@ -1,6 +1,6 @@
 # emacs-config
 
-My personal Emacs configuration files.
+My personal Emacs configuration files. "init.el" contains auto-generated code created by themes and loads the file "user-init.el" just to keep things clean.
 
 ## Packages
 
@@ -33,4 +33,4 @@ I have also enabled a number of features that I find useful:
 
 ## Personal Features
 
-Created a popup buffer switcher that keeps them in order of most recently accessed. Located in lib/buffer-cycle/.
+Created a popup buffer switcher that keeps them in order of most recently accessed. Located in "lib/buffer-cycle/".
