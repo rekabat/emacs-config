@@ -96,8 +96,8 @@
 ;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
 (global-set-key "\C-t" 'goto-line)
 ;; add keyboard shortcuts for easily cycling between buffers
-(global-set-key (kbd "C-;") 'previous-buffer)
-(global-set-key (kbd "C-'") 'next-buffer)
+;(global-set-key (kbd "C-;") 'previous-buffer)
+;(global-set-key (kbd "C-'") 'next-buffer)
 
 ;;;;;;;;;;;;;;;;
 ;; OS X specific
