@@ -9,6 +9,9 @@
 ;;    4: hop to another window if the selected buffer is already open
 ;;    5: automatically go to the second or last item depending on the button pressed.
 
+;; design questions:
+;;
+
 
 ;; for the sake of extending the functionality of this package, 
 ;; I've included all the default keybinds of the popup system.
@@ -48,26 +51,15 @@
 (defvar bc-next-key nil)
 (defvar bc-prev-key nil)
 (defvar bc-select-buf (kbd "RET"))
+(defvar bc-kill-selected-buf (kbd "C-k"))
 
 (defun bc-set-next-prev-keybinds (next prev)
   (setq bc-next-key next)
   (setq bc-prev-key prev)
-  ; (global-set-key next 'bc-launch-next)
-  ; (global-set-key (event-convert-list prev) 'bc-launch-previous)
-  ; (define-key bc-keybinds (event-convert-list next) 'popup-next)
-  ; (define-key bc-keybinds (event-convert-list prev) 'popup-previous)
-
   (global-set-key next 'bc-launch-next)
   (global-set-key prev 'bc-launch-previous)
   (define-key bc-keybinds next 'popup-next)
-  (define-key bc-keybinds prev 'popup-previous)
-
-
-  ; (global-set-key (kbd next) 'bc-launch-next)
-  ; (global-set-key (kbd prev) 'bc-launch-previous)
-  ; (define-key bc-keybinds (kbd next) 'popup-next)
-  ; (define-key bc-keybinds (kbd prev) 'popup-previous)
-)
+  (define-key bc-keybinds prev 'popup-previous))
 
 (setq bc-list-of-buffers ())   ; how do I make this private? And other functions
 (setq bc-current-buffer 0)
@@ -165,9 +157,9 @@
   (message "Switch to buffer %d: \"%s\"" start-position (nth start-position bc-list-of-buffers))
   (let ((the-event (read-char)))
     (cond ((eq the-event (elt bc-select-buf 0)) (bc-switch-to-buffer-and-put-on-top (elt bc-list-of-buffers start-position)))
+          ;((eq the-event (elt bc-kill-selected-buf 0)) (kill-buffer (elt bc-list-of-buffers start-position)))
           ((eq the-event (elt bc-next-key 0)) (bc-launch-prompt (+ start-position 1)))
-          ((eq the-event (elt bc-prev-key 0)) (bc-launch-prompt (- start-position 1)))
-          (t (message "%s %s" the-event bc-select-buf)))))
+          ((eq the-event (elt bc-prev-key 0)) (bc-launch-prompt (- start-position 1))))))
 
 (defun bc-launch-next ()
   "One of two ways to launch the buffer-cycle popup window. Recommended that it's bound to C-;"

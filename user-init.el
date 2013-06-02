@@ -77,9 +77,6 @@
 (setq visible-bell t)
 ;; turn off the useless toolbar in GUI mode
 (if window-system (tool-bar-mode 0))
-;; I hate C-x f, I don't want to change the width....
-(global-unset-key (kbd "C-x f"))
-(global-set-key (kbd "C-x f") 'find-file)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -116,10 +113,7 @@
 ;; Personal libs
 ;;;;;;;;;;;;;;;;
 
-;(load "~/.emacs.d/lib/buffer-cycle/buffer-cycle.el")
-;(setq psw-in-window-center t)
-;(global-set-key "\C-i" 'psw-switch)
-
 (load "~/.emacs.d/lib/buffer-cycle/buffer-cycle.el")
+(bc-set-next-prev-keybinds (kbd "C-;") (kbd "C-'"))
 ;(bc-set-next-prev-keybinds '(control \;) '(control \') )
-(bc-set-next-prev-keybinds [?\C-\;] [?\C-\'] )
+;(bc-set-next-prev-keybinds [?\C-\;] [?\C-\'] )
