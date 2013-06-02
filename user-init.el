@@ -117,6 +117,5 @@
 ;(setq psw-in-window-center t)
 ;(global-set-key "\C-i" 'psw-switch)
 
-(load "~/.emacs.d/lib/buffer-cycle/new-bc.el")
+(load "~/.emacs.d/lib/buffer-cycle/buffer-cycle.el")
 (bc-set-next-prev-keybinds (kbd "C-;") (kbd "C-'"))
-
