@@ -31,8 +31,20 @@
     ;; Auto Completion for GNU Emacs
     auto-complete
 
+    ;; minor mode for editing parentheses
+    paredit
+
     ;; switch to other buffers and files via popup.
 ;    popup-switcher  ; also requires package "popup"
+
+    ;;All of the clojure stuff
+    ;;Major mode for Clojure code
+    clojure-mode
+    ;;Client for Clojure nREPL
+    nrepl
+    ;;auto-complete sources for Clojure using nrepl completions
+    ac-nrepl
+
    )
 )
 
@@ -62,6 +74,22 @@
 (require 'auto-complete-config)
 (ac-config-default)
 
+;; paredit minor-mode hooks
+(add-hook 'clojure-mode-hook    'paredit-mode)
+(add-hook 'nrepl-mode-hook      'paredit-mode)
+(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(add-hook 'lisp-mode-hook       'paredit-mode)
+(add-hook 'scheme-mode-hook     'paredit-mode)
+
+;; enable eldoc in clojure buffers
+(add-hook 'nrepl-interaction-mode-hook
+  'nrepl-turn-on-eldoc-mode)
+
+;; enable autocomplete in nrepl buffers (ac-nrepl)
+(add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
+ (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
+ (eval-after-load "auto-complete"
+   '(add-to-list 'ac-modes 'nrepl-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Disable annoyances
@@ -88,12 +116,17 @@
 (global-linum-mode 1)
 ;; highlight the line the cursor is currently on
 (global-hl-line-mode 1)
+;; highlight the matching delimeter that the cursor is on
+(show-paren-mode 1)
 ;; start in an empty buffer instead of the help screen
 (setf inhibit-splash-screen t)
 (switch-to-buffer (get-buffer-create "empty"))
 ;;(delete-other-windows)
 ;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
 (global-set-key "\C-t" 'goto-line)
+;; set enter to be new line and indent by default in prog modes
+(add-hook 'prog-mode-hook (global-set-key (kbd "<RET>") 'newline-and-indent))
+
 ;; add keyboard shortcuts for easily cycling between buffers
 ;(global-set-key (kbd "C-;") 'previous-buffer)
 ;(global-set-key (kbd "C-'") 'next-buffer)
