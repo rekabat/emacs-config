@@ -2,8 +2,12 @@
 *~
 \#*#
 
+#ignore desktop files, but keep the directory
+desktop/*
+
 #ignore certain directories
 auto-save-list
+target
 elpa
 
 #ignore specific package files
