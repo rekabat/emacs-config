@@ -1,6 +1,7 @@
 #ignore all temp files
 *~
 \#*#
+.#*
 
 #ignore desktop files, but keep the directory
 desktop/*

@@ -165,6 +165,19 @@
       desktop-load-locked-desktop nil)
 (desktop-save-mode 1)
 
+;; auto-indent yanked text
+(defun yank-and-indent ()
+  "Yank and then indent the newly formed region according to mode."
+  (interactive)
+  (yank)
+  (call-interactively 'indent-region))
+(defun yank-pop-and-indent ()
+  "Yank-pop and then indent the newly formed regiona according to mode."
+  (interactive)
+  (yank-pop)
+  (call-interactively 'indent-region))
+(global-set-key (kbd "C-y") 'yank-and-indent)
+(global-set-key (kbd "M-y") 'yank-pop-and-indent)
 
 ;; line wrap on long lines
 ;(set-fill-column 80)
