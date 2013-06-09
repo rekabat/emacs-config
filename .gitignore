@@ -12,3 +12,6 @@ elpa
 
 #ignore specific package files
 ac-comphist.dat
+
+#ignore operating system files
+.DS_store
