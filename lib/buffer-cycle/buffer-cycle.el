@@ -42,18 +42,21 @@
 (require 'popup)
 (require 'artist)
 
-(defvar bc-use-popup nil)
-(defvar bc-max-height 15)
-(defvar bc-include-search nil)
-(defvar bc-keybinds popup-menu-keymap)
-(define-key bc-keybinds (kbd "C-k") 'bc-kill-selected-buffer)
+(defvar bc-use-popup t "Default t. Set to nil to use the minibuf prompt.")
+(defvar bc-max-height 15 "Max number of rows in the popup. Will use scrollbar if in excess of max.")
+(defvar bc-include-search nil  "Default nil. Set to t to allow searching of buffers when using popoup.")
 
-(defvar bc-next-key nil)
-(defvar bc-prev-key nil)
-(defvar bc-select-buf (kbd "RET"))
-(defvar bc-kill-selected-buf (kbd "C-k"))
+(defvar bc-next-key nil "Set using bc-set-next-prev-keybinds.")
+(defvar bc-prev-key nil "Set using bc-set-next-prev-keybinds.")
+(defvar bc-select-key (kbd "RET"))
+(defvar bc-kill-key nil "Set using bc-set-kill-keybind.")
+
+(defvar bc-keybinds popup-menu-keymap)
+;(define-key bc-keybinds bc-kill-selected-buf 'bc-kill-selected-buffer)
+(define-key bc-keybinds bc-select-key 'popup-select)
 
 (defun bc-set-next-prev-keybinds (next prev)
+  "Set all the appropriate buffer switching functions to be bound o the provided keybinds."
   (setq bc-next-key next)
   (setq bc-prev-key prev)
   (global-set-key next 'bc-launch-next)
@@ -61,31 +64,18 @@
   (define-key bc-keybinds next 'popup-next)
   (define-key bc-keybinds prev 'popup-previous))
 
-(setq bc-list-of-buffers ())   ; how do I make this private? And other functions
-(setq bc-current-buffer 0)
+(defun bc-set-kill-keybind (kill)
+  "Set all the appropriate buffer killing functions to be bound to the provided keybind."
+  (setq bc-kill-key kill)
+  (define-key bc-keybinds kill '(lambda (thepopup)
+				 (message "hello")
+				 (let ((buff (popup-selected-item thepopup)))
+				   (popup-close thepopup)
+				   (bc-kill-selected-buffer buff)))))
 
-(defun bc-kill-selected-buffer (thepopup)
-  ; (let ((i (position (get-selected-item thepopup) bc-list-of-buffers)))
-  ;        (defun remove-nth (n list)
-  ;          (if (or (zerop n) (null list))
-  ;          	(cdr list)
-  ;          	(cons (car list) (remove-nth (1- n) (cdr list)))))
-  ;        (setq bc-list-of-buffers (remove-nth i bc-list-of-buffers)))
-  (let ((height (thepopup-height thepopup))
-        (cursor (1+ (thepopup-cursor thepopup)))
-        (scroll-top (thepopup-scroll-top thepopup))
-        (length (length (thepopup-list thepopup))))
-    (cond
-     ((>= cursor length)
-      ;; Back to first page
-      (setq cursor 0
-            scroll-top 0))
-     ((= cursor (+ scroll-top height))
-      ;; Go to next page
-      (setq scroll-top (min (1+ scroll-top) (max (- length height) 0)))))
-    (setf (thepopup-cursor thepopup) cursor
-          (thepopup-scroll-top thepopup) scroll-top)
-    (thepopup-draw thepopup)))
+(setq bc-list-of-buffers ())   ; how do I make this private? And other functions
+
+
 
 (defun bc-update-buffer-list ()
   "Called whenever buffer-list is updated. Uses the buffer-list-update-hook."
@@ -104,27 +94,37 @@
   ;; removes any buffers that had been killed
   (setq bc-list-of-buffers (member-if 'buffer-live-p bc-list-of-buffers)))
 
+;; update every time there is a change to the buffer list
 (add-hook 'buffer-list-update-hook 'bc-update-buffer-list)
 
-(defun bc-switch-to-buffer-and-put-on-top (buff)
+
+(defun bc-remove-buffer-from-list (buff)
+  "Removes a buffer from bc-list-of-buffers."
   (let ((i (position buff bc-list-of-buffers)))
-       (defun remove-nth (n list)
-         (if (or (zerop n) (null list))
-         	(cdr list)
-         	(cons (car list) (remove-nth (1- n) (cdr list)))))
-       (setq bc-list-of-buffers (remove-nth i bc-list-of-buffers))
-       (if (eq i 0)
-           (message "Already selected buffer: \"%s\"" buff)
-           (message "Opened buffer: \"%s\"" buff)))
+    (defun remove-nth (n list)
+      (if (or (zerop n) (null list))
+	  (cdr list)
+	(cons (car list) (remove-nth (1- n) (cdr list)))))
+    (setq bc-list-of-buffers (remove-nth i bc-list-of-buffers))))
+
+(defun bc-kill-selected-buffer (buff)
+  "Asks if you're sure you want to kill, then calls kill-buffer on the buffer and removes it from bc-list-of-buffers."
+  (if (y-or-n-p (format "Kill buffer \"%s\"?" buff))
+      (progn
+	(bc-remove-buffer-from-list buff)
+	(kill-buffer buff))))
+
+(defun bc-switch-to-buffer-and-put-on-top (buff)
+  "Bumps the selected buffer to the top of bc-list-of-buffers."
+  (bc-remove-buffer-from-list buff)
   (push buff bc-list-of-buffers)
-  (switch-to-buffer buff))
-  
+  (switch-to-buffer buff))  
 
 (defun bc-launch-popup ()
   "Called by the two main functions of buffer-cycle: bc-launch-next & bc-launch-previous."
   (let* ((menu-height (min bc-max-height (length bc-list-of-buffers) (- (window-height) 4)))
-         (menu-width (apply 'max (mapcar
-         	                        (lambda (a) (length (buffer-name a)))
+	 (menu-width (apply 'max (mapcar
+				  (lambda (a) (length (buffer-name a)))
                                     bc-list-of-buffers)))
          (x (/ (- (window-width) menu-width) 2))
          (y (+ (- (save-excursion (goto-char (window-start)) (line-number-at-pos)) 2)
@@ -151,13 +151,14 @@
            (bc-switch-to-buffer-and-put-on-top thepopup)))))
 
 (defun bc-launch-prompt (start-position)
+  "Opens the minibuf prompt for changing buffers. Called recursively by subsequent keystrokes."
   (interactive)
   (cond ((>= start-position (length bc-list-of-buffers)) (setq start-position 0))
         ((<= start-position -1) (setq start-position (- (length bc-list-of-buffers) 1))))
   (message "Switch to buffer %d: \"%s\"" start-position (nth start-position bc-list-of-buffers))
   (let ((the-event (read-char)))
-    (cond ((eq the-event (elt bc-select-buf 0)) (bc-switch-to-buffer-and-put-on-top (elt bc-list-of-buffers start-position)))
-          ;((eq the-event (elt bc-kill-selected-buf 0)) (kill-buffer (elt bc-list-of-buffers start-position)))
+    (cond ((eq the-event (elt bc-select-key 0)) (bc-switch-to-buffer-and-put-on-top (elt bc-list-of-buffers start-position)))
+	  ((eq the-event (elt bc-kill-key 0)) (bc-kill-selected-buffer (elt bc-list-of-buffers start-position)))
           ((eq the-event (elt bc-next-key 0)) (bc-launch-prompt (+ start-position 1)))
           ((eq the-event (elt bc-prev-key 0)) (bc-launch-prompt (- start-position 1))))))
 
