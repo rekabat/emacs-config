@@ -110,6 +110,19 @@
 ;; Enable helpful features
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun toggle-fullscreen ()
+  "Toggle full screen"
+  (interactive)
+  (set-frame-parameter
+     nil 'fullscreen
+     (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
+
+;; maximize the window on open
+(add-hook 'after-init-hook 'toggle-fullscreen)
+;; start in an empty buffer instead of the help screen
+(setf inhibit-splash-screen t)
+(switch-to-buffer (get-buffer-create "empty"))
+;;(delete-other-windows)
 ;; display the column number
 (setq column-number-mode t)
 ;; display line numbers in left column
@@ -118,14 +131,10 @@
 (global-hl-line-mode 1)
 ;; highlight the matching delimeter that the cursor is on
 (show-paren-mode 1)
-;; start in an empty buffer instead of the help screen
-(setf inhibit-splash-screen t)
-(switch-to-buffer (get-buffer-create "empty"))
-;;(delete-other-windows)
 ;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
 (global-set-key "\C-t" 'goto-line)
 ;; set enter to be new line and indent by default in prog modes
-(add-hook 'prog-mode-hook (global-set-key (kbd "<RET>") 'newline-and-indent))
+(add-hook 'prog-mode-hook (lambda ()  (local-set-key (kbd "RET") 'newline-and-indent)))
 
 ;; add keyboard shortcuts for easily cycling between buffers
 ;(global-set-key (kbd "C-;") 'previous-buffer)
@@ -146,6 +155,7 @@
 ;;;;;;;;;;;;;;;;
 
 (load "~/.emacs.d/lib/buffer-cycle/buffer-cycle.el")
+(setq bc-use-popup t)
 (bc-set-next-prev-keybinds (kbd "C-;") (kbd "C-'"))
 ;(bc-set-next-prev-keybinds '(control \;) '(control \') )
 ;(bc-set-next-prev-keybinds [?\C-\;] [?\C-\'] )
