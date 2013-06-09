@@ -97,10 +97,13 @@
 
 ;; turn off the blinking cursor
 (blink-cursor-mode 0)
+
 ;; turn off the alert bell and make it display a square on the screen
 (setq visible-bell t)
+
 ;; turn off the useless toolbar in GUI mode
 (if window-system (tool-bar-mode 0))
+
 ;; I hate C-x f, I don't want to change the width....
 (global-unset-key (kbd "C-x f"))
 (global-set-key (kbd "C-x f") 'find-file)
@@ -110,31 +113,62 @@
 ;; Enable helpful features
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; maximize the window on open
 (defun toggle-fullscreen ()
   "Toggle full screen"
   (interactive)
   (set-frame-parameter
      nil 'fullscreen
      (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
-
-;; maximize the window on open
 (add-hook 'after-init-hook 'toggle-fullscreen)
+
 ;; start in an empty buffer instead of the help screen
+(defun create-empty-buffer ()
+  (interactive)
+  (switch-to-buffer (get-buffer-create "empty")))
 (setf inhibit-splash-screen t)
-(switch-to-buffer (get-buffer-create "empty"))
+;; no longer want to start in empty buffer because I load desktops
+;;(switch-to-buffer (get-buffer-create "empty"))
+(global-set-key (kbd "M-n") 'create-empty-buffer)
 ;;(delete-other-windows)
+
 ;; display the column number
 (setq column-number-mode t)
+
 ;; display line numbers in left column
 (global-linum-mode 1)
+
 ;; highlight the line the cursor is currently on
 (global-hl-line-mode 1)
+
 ;; highlight the matching delimeter that the cursor is on
 (show-paren-mode 1)
+
 ;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
 (global-set-key "\C-t" 'goto-line)
+
 ;; set enter to be new line and indent by default in prog modes
 (add-hook 'prog-mode-hook (lambda ()  (local-set-key (kbd "RET") 'newline-and-indent)))
+
+;; save all current buffers for next time, if you want to clear desktop (for whatever reason) use desktop-clear
+;(desktop-change-dir "~/.emacs.d/desktop/")
+;(add-hook 'after-init-hook 'desktop-read)
+;(add-hook 'kill-emacs-hook 'desktop-save-in-desktop-dir)
+;(desktop-save-mode t)
+;; Automatically save and restore sessions
+(setq desktop-dirname             "~/.emacs.d/desktop/"
+      desktop-base-file-name      "emacs.desktop"
+      desktop-base-lock-name      "lock"
+      desktop-path                (list desktop-dirname)
+      desktop-save                t
+;      desktop-files-not-to-save   "^$" ;reload tramp paths
+      desktop-load-locked-desktop nil)
+(desktop-save-mode 1)
+
+
+;; line wrap on long lines
+;(set-fill-column 80)
+;(global-visual-line-mode t)
 
 ;; add keyboard shortcuts for easily cycling between buffers
 ;(global-set-key (kbd "C-;") 'previous-buffer)
@@ -155,8 +189,9 @@
 ;;;;;;;;;;;;;;;;
 
 (load "~/.emacs.d/lib/buffer-cycle/buffer-cycle.el")
-(setq bc-use-popup t)
+(setq bc-use-popup nil)
 (bc-set-next-prev-keybinds (kbd "C-;") (kbd "C-'"))
+(bc-set-kill-keybind (kbd "C-k"))
 ;(bc-set-next-prev-keybinds '(control \;) '(control \') )
 ;(bc-set-next-prev-keybinds [?\C-\;] [?\C-\'] )
 
