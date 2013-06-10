@@ -298,4 +298,8 @@
       (bc-launch-popup (- (length bc-list-of-buffers) 1))
     (bc-launch-prompt (- (length bc-list-of-buffers) 1))))
 
+(defun bc-toggle-format ()
+  (interactive)
+  (setq bc-use-popup (not bc-use-popup)))
+
 (provide 'buffer-cycle)
