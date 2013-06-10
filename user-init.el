@@ -24,7 +24,7 @@
 
     ;; Highlight nested parens, brackets, braces a different color at each depth.
     rainbow-delimiters
-    
+
     ;; M-x interface with Ido-style fuzzy matching.
     smex
 
@@ -151,10 +151,13 @@
 (show-paren-mode 1)
 
 ;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
-(global-set-key "\C-t" 'goto-line)
+(global-set-key (kbd "C-t") 'goto-line)
 
 ;; set enter to be new line and indent by default in prog modes
 (add-hook 'prog-mode-hook (lambda ()  (local-set-key (kbd "RET") 'newline-and-indent)))
+
+;; automatically delete trailing whitespace before save
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; save all current buffers for next time, if you want to clear desktop (for whatever reason) use desktop-clear
 ;(desktop-change-dir "~/.emacs.d/desktop/")
@@ -195,6 +198,14 @@
 )
 (global-set-key (kbd "C-,") 'comment-or-uncomment-region-or-line)
 
+;; kill block or line
+(defun kill-region-or-line (begin end)
+  (interactive (if (use-region-p)
+		   (list (region-beginning) (region-end))
+		 (list (line-beginning-position) (line-end-position))))
+  (kill-region begin end))
+(global-set-key (kbd "C-M-<backspace>") 'kill-region-or-line)
+
 ;; line wrap on long lines
 ;(set-fill-column 80)
 ;(global-visual-line-mode t)
@@ -216,7 +227,7 @@
 ;;;;;;;;;;;;;;;;
 ;; Personal libs
 ;;;;;;;;;;;;;;;;
-													    
+
 (load "~/.emacs.d/lib/buffer-cycle/buffer-cycle.el")
 ;; (setq bc-use-popup nil)
 (bc-set-next-prev-keybinds (kbd "C-;") (kbd "C-'"))
