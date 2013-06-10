@@ -210,9 +210,9 @@
 ;;;;;;;;;;;;;;;;
 ;; Personal libs
 ;;;;;;;;;;;;;;;;
-
+													    
 (load "~/.emacs.d/lib/buffer-cycle/buffer-cycle.el")
-(setq bc-use-popup nil)
+;; (setq bc-use-popup nil)
 (bc-set-next-prev-keybinds (kbd "C-;") (kbd "C-'"))
 (bc-set-kill-keybind (kbd "C-k"))
 ;(bc-set-next-prev-keybinds '(control \;) '(control \') )
