@@ -16,8 +16,11 @@
 (defvar packages-to-get
   '(;; themes
     solarized-theme
-    ;;monokai-theme
-    ;;zenburn-theme
+    subatomic-theme
+    ;; subatomic256-theme
+    ;; color-theme-sanityinc-tomorrow	;color-theme-sanityinc-tomorrow-eighties is the good one
+    ;; monokai-theme
+    ;; zenburn-theme
 
     ;; Highlight nested parens, brackets, braces a different color at each depth.
     rainbow-delimiters
@@ -59,7 +62,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; load the appropriate imported package theme. I like: Misterioso, Whiteboard, wombat, solarized-light, solarized-dark, zenburn
-(load-theme 'solarized-dark t)
+;; (load-theme 'solarized-dark t)
+;; (load-theme 'sanityinc-tomorrow-eighties t)
+;; (load-theme 'subatomic256 t)
+(load-theme 'subatomic t)
 
 ;; activate rainbow delimiters in all modes
 (global-rainbow-delimiters-mode)
