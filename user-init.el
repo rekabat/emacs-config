@@ -179,6 +179,16 @@
 (global-set-key (kbd "C-y") 'yank-and-indent)
 (global-set-key (kbd "M-y") 'yank-pop-and-indent)
 
+;; comment block or line
+(defun comment-or-uncomment-region-or-line (begin end)
+  (interactive (if (use-region-p)
+		   (list (region-beginning) (region-end))
+		 (list (line-beginning-position) (line-end-position))))
+  (comment-or-uncomment-region begin end)
+  ;; (next-line)
+)
+(global-set-key (kbd "C-,") 'comment-or-uncomment-region-or-line)
+
 ;; line wrap on long lines
 ;(set-fill-column 80)
 ;(global-visual-line-mode t)
