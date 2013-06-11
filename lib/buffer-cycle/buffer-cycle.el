@@ -14,7 +14,7 @@
 ;;
 
 
-;; for the sake of extending the functionality of this package, 
+;; for the sake of extending the functionality of this package,
 ;; I've included all the default keybinds of the popup system.
 
 ;; (defvar popup-menu-keymap
@@ -54,17 +54,17 @@
 
 (defvar bc-keybinds popup-menu-keymap)
 (define-key bc-keybinds bc-select-key 'popup-select)
-													    
+
 (defun bc-set-next-prev-keybinds (next prev)
   "Set all the appropriate buffer switching functions to be bound to the provided keybinds."
   (setq bc-next-key next)
   (setq bc-prev-key prev)
   (global-set-key next 'bc-launch-next)
-  (global-set-key prev 'bc-launch-previous)								    
+  (global-set-key prev 'bc-launch-previous)
   (define-key bc-keybinds next 'popup-next)
   (define-key bc-keybinds prev 'popup-previous))
 
-(defun bc-set-kill-keybind (kill)									    
+(defun bc-set-kill-keybind (kill)
   "Set all the appropriate buffer killing functions to be bound to the provided keybind."
   (setq bc-kill-key kill)
   (define-key bc-keybinds kill 'bc-popup-kill-buffer))
@@ -73,13 +73,13 @@
 
 ;; (defun bc-popup-kill-buffer ()
 ;;   (interactive)
-;;   (let ((buff (popup-selected-item thepopup)))				    
+;;   (let ((buff (popup-selected-item thepopup)))
 ;;     ;; (popup-delete thepopup)
-;;     (bc-kill-selected-buffer buff)									    
+;;     (bc-kill-selected-buffer buff)
 ;;     (popup-delete thepopup)
 ;;     ))
 
-;; (defun* bc-popup-menu-event-loop (menu									    
+;; (defun* bc-popup-menu-event-loop (menu
 ;;                                keymap
 ;;                                fallback
 ;;                                &key
@@ -87,7 +87,7 @@
 ;;                                help-delay
 ;;                                isearch
 ;;                                isearch-cursor-color
-;;                                isearch-keymap								    
+;;                                isearch-keymap
 ;;                                isearch-callback
 ;;                                &aux key binding)
 ;;   (block nil
@@ -175,7 +175,7 @@
       ;; Make scroll-bar space as margin-right
       (decf margin-right))
   (setq menu (popup-create point width height
-                           :around around								    
+                           :around around
                            :face 'popup-menu-face
                            :mouse-face 'popup-menu-mouse-face
                            :selection-face 'popup-menu-selection-face
@@ -205,9 +205,9 @@
   ;; more effecient to create the list once
   ;; reverse it for the sake of the first call, so things go in in order
   (setq bl (reverse (buffer-list)))
-  ;; adds any buffers added to the list (after filtering)						    
+  ;; adds any buffers added to the list (after filtering)
   (dolist (b bl)
-    (when (and 
+    (when (and
 	   (not (member b 'bc-list-of-buffers))
 	   (buffer-live-p b)
 	   (not (minibufferp b))
@@ -239,7 +239,7 @@
   "Bumps the selected buffer to the top of bc-list-of-buffers."
   (bc-remove-buffer-from-list buff)
   (push buff bc-list-of-buffers)
-  (switch-to-buffer buff))  
+  (switch-to-buffer buff))
 
 (defun bc-launch-popup (i)
   "Called by the two main functions of buffer-cycle: bc-launch-next & bc-launch-previous."
@@ -260,7 +260,7 @@
          	          bc-list-of-buffers
          	          :point menu-pos
          	          :width menu-width
-         	          :height menu-height								    
+         	          :height menu-height
          	          :scroll-bar t
          	          :keymap bc-keybinds
          	          :isearch bc-include-search
@@ -268,7 +268,7 @@
 	  (when (buffer-modified-p)
 	    (delete-region (window-start) (window-end))
 	    (insert saved-text)
-	    (goto-char old-pos)										    
+	    (goto-char old-pos)
 	    (set-buffer-modified-p modified))
 	  (bc-switch-to-buffer-and-put-on-top thepopup)))))
 
