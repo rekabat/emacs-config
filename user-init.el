@@ -37,6 +37,9 @@
     ;; minor mode for editing parentheses
     paredit
 
+    ;; Treat undo history as a tree
+    undo-tree
+
     ;; switch to other buffers and files via popup.
     ;; popup-switcher  ; also requires package "popup"
 
@@ -86,6 +89,9 @@
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 (add-hook 'lisp-mode-hook       'paredit-mode)
 (add-hook 'scheme-mode-hook     'paredit-mode)
+
+;; globally enable undo-tree-mode
+(global-undo-tree-mode)
 
 ;; enable eldoc in clojure buffers
 (add-hook 'nrepl-interaction-mode-hook
@@ -149,6 +155,11 @@
 
 ;; highlight the matching delimeter that the cursor is on
 (show-paren-mode 1)
+
+;; Ido everywhere
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1)
 
 ;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
 (global-set-key (kbd "C-t") 'goto-line)
@@ -228,3 +239,4 @@
 ;;;;;;;;;;;;;;;;;;;;;;
 
 ; (require 'dirtree)
+(load "~/.emacs.d/ex-lib/dircolors.el")
