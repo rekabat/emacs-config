@@ -56,7 +56,7 @@
 	       (if (y-or-n-p "Save session?")
 		   (sm-save-desktop)
 		 (if (sm-saved-desktop-p)
-		     (if (not (y-or-n-p "Preserve previous session?"))
+		     (if (y-or-n-p "Delete old session?")
 			 (sm-delete-desktop)))))))
 
 (if sm-auto-load
