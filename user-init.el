@@ -38,7 +38,7 @@
     paredit
 
     ;; switch to other buffers and files via popup.
-;    popup-switcher  ; also requires package "popup"
+    ;; popup-switcher  ; also requires package "popup"
 
     ;;All of the clojure stuff
     ;;Major mode for Clojure code
@@ -159,21 +159,6 @@
 ;; automatically delete trailing whitespace before save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;; save all current buffers for next time, if you want to clear desktop (for whatever reason) use desktop-clear
-;(desktop-change-dir "~/.emacs.d/desktop/")
-;(add-hook 'after-init-hook 'desktop-read)
-;(add-hook 'kill-emacs-hook 'desktop-save-in-desktop-dir)
-;(desktop-save-mode t)
-;; Automatically save and restore sessions
-(setq desktop-dirname             "~/.emacs.d/desktop/"
-      desktop-base-file-name      "emacs.desktop"
-      desktop-base-lock-name      "lock"
-      desktop-path                (list desktop-dirname)
-      desktop-save                t
-;      desktop-files-not-to-save   "^$" ;reload tramp paths
-      desktop-load-locked-desktop nil)
-(desktop-save-mode 1)
-
 ;; auto-indent yanked text
 (defun yank-and-indent ()
   "Yank and then indent the newly formed region according to mode."
@@ -234,6 +219,8 @@
 (bc-set-kill-keybind (kbd "C-k"))
 ;(bc-set-next-prev-keybinds '(control \;) '(control \') )
 ;(bc-set-next-prev-keybinds [?\C-\;] [?\C-\'] )
+
+(load "~/.emacs.d/lib/session-manager/session-manager.el")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
