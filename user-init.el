@@ -14,13 +14,38 @@
 
 ;; define a list of all the packages of interest
 (defvar packages-to-get
-  '(;; themes
+  '(
+    ;; themes
+    base16-theme
     solarized-theme
     subatomic-theme
     ;; subatomic256-theme
-    ;; color-theme-sanityinc-tomorrow	;color-theme-sanityinc-tomorrow-eighties is the good one
     ;; monokai-theme
     ;; zenburn-theme
+
+    ;; ;; Sublime-like scrolling
+    ;; sublimity
+
+    ;; directory browsing
+    neotree
+
+    ;; tabs for buffers
+    tabbar
+
+    ;; better scrollbars
+    yascroll
+
+    ;; improve the bar on the bottom
+    telephone-line
+
+    ;; ;; nyan-cat doc position
+    ;; nyan-mode
+
+    ;; ;; project management
+    ;; projectile
+
+    ;; session management
+    workgroups2
 
     ;; Highlight nested parens, brackets, braces a different color at each depth.
     rainbow-delimiters
@@ -28,11 +53,19 @@
     ;; M-x interface with Ido-style fuzzy matching.
     smex
 
-    ;; All the packages necessary for auto-complete
     ;; Visual Popup User Interface
     popup
+
+    ;; auto-complete framework
+    company
+
+    ;; for fuzzy matching
+    company-flx
+
     ;; Auto Completion for GNU Emacs
-    auto-complete
+    ;; auto-complete
+    ;; for fuzzy completion in auto-complete
+    ;; fuzzy
 
     ;; minor mode for editing parentheses
     paredit
@@ -40,16 +73,24 @@
     ;; Treat undo history as a tree
     undo-tree
 
+    ;; Window switching
+    switch-window
+
     ;; switch to other buffers and files via popup.
     ;; popup-switcher  ; also requires package "popup"
 
     ;;All of the clojure stuff
     ;;Major mode for Clojure code
-    clojure-mode
+    ;; clojure-mode
     ;;Client for Clojure nREPL
-    nrepl
+    ; nrepl
     ;;auto-complete sources for Clojure using nrepl completions
-    ac-nrepl
+					; ac-nrepl
+
+
+    ;; Entertainment
+    ;; xkcd
+    2048-game
 
    )
 )
@@ -66,22 +107,53 @@
 
 ;; load the appropriate imported package theme. I like: Misterioso, Whiteboard, wombat, solarized-light, solarized-dark, zenburn
 ;; (load-theme 'solarized-dark t)
+;; (load-theme 'solarized-light t)
 ;; (load-theme 'sanityinc-tomorrow-eighties t)
 ;; (load-theme 'subatomic256 t)
-(load-theme 'subatomic t)
+;; (load-theme 'subatomic t)
+(load-theme 'base16-eighties t)
+
+;; tabbar
+(add-hook 'after-init-hook #'tabbar-mode) ;; open on startup
+(load "~/.emacs.d/customize-tabbar.el")
+
+;; scrollbar
+(global-yascroll-bar-mode 1)
+(setq yascroll:delay-to-hide nil)
+
+;; telephone-line
+(require 'telephone-line)
+(telephone-line-mode 1)
+
+;; neotree on startup
+;; (add-hook 'after-init-hook #'neotree-toggle)
+
+;; ;; sublimity
+;; (require 'sublimity)
+;; (require 'sublimity-scroll)
+;; (sublimity-mode 1)
+
+;; workgroups
+(require 'workgroups2)
+(workgroups-mode 1)
 
 ;; activate rainbow delimiters in all modes
-(global-rainbow-delimiters-mode)
+; (global-rainbow-delimiters-mode)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 ;; activate smex and assign it to M-x instead of the default
 (smex-initialize) ; initializes at startup (not first use)
-(global-set-key "\M-x" 'smex)
-(global-set-key "\M-X" 'smex-major-mode-commands)
-(global-set-key "\C-c \C-c \M-x" 'execute-extended-command) ; the old M-x
 
 ;; activate auto-complete
-(require 'auto-complete-config)
-(ac-config-default)
+;; (require 'auto-complete-config)
+;; (ac-config-default)
+(add-hook 'after-init-hook 'global-company-mode)
+(setq company-minimum-prefix-length 1)
+(setq company-idle-delay 0.0)
+
+;; company-flx
+(with-eval-after-load 'company
+  (company-flx-mode +1))
 
 ;; paredit minor-mode hooks
 (add-hook 'clojure-mode-hook    'paredit-mode)
@@ -93,15 +165,32 @@
 ;; globally enable undo-tree-mode
 (global-undo-tree-mode)
 
-;; enable eldoc in clojure buffers
-(add-hook 'nrepl-interaction-mode-hook
-  'nrepl-turn-on-eldoc-mode)
+;; switch-window
+(require 'switch-window)
+(global-set-key (kbd "C-x o") 'switch-window)
+(global-set-key (kbd "C-x 1") 'switch-window-then-maximize)
+(global-set-key (kbd "C-x 2") 'switch-window-then-split-below)
+(global-set-key (kbd "C-x 3") 'switch-window-then-split-right)
+(global-set-key (kbd "C-x 0") 'switch-window-then-delete)
 
-;; enable autocomplete in nrepl buffers (ac-nrepl)
-(add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
- (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
- (eval-after-load "auto-complete"
-   '(add-to-list 'ac-modes 'nrepl-mode))
+;; ;; enable eldoc in clojure buffers
+;; (add-hook 'nrepl-interaction-mode-hook
+;;   'nrepl-turn-on-eldoc-mode)
+
+;; ;; enable autocomplete in nrepl buffers (ac-nrepl)
+;; (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
+;; (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
+;; (eval-after-load "auto-complete"
+;;   '(add-to-list 'ac-modes 'nrepl-mode))
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Appearance
+;;;;;;;;;;;;;;;;;;;;;
+(custom-set-faces
+ '(default ((t (:inherit nil :stipple nil :background "#2d2d2d" :foreground "#d3d0c8" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "outline" :family "Ubuntu Mono")))))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Disable annoyances
@@ -113,12 +202,10 @@
 ;; turn off the alert bell and make it display a square on the screen
 (setq visible-bell t)
 
-;; turn off the useless toolbar in GUI mode
-(if window-system (tool-bar-mode 0))
-
-;; I hate C-x f, I don't want to change the width....
-(global-unset-key (kbd "C-x f"))
-(global-set-key (kbd "C-x f") 'find-file)
+;; turn off the useless toolbar and menubar in GUI mode
+(if window-system (tool-bar-mode -1))
+(if window-system (menu-bar-mode -1))
+(if window-system (scroll-bar-mode -1))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -126,13 +213,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; maximize the window on open
-(defun toggle-fullscreen ()
-  "Toggle full screen"
-  (interactive)
-  (set-frame-parameter
-     nil 'fullscreen
-     (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
-(add-hook 'after-init-hook 'toggle-fullscreen)
+; (defun toggle-fullscreen ()
+;   "Toggle full screen"
+;   (interactive)
+;   (set-frame-parameter
+;      nil 'fullscreen
+;      (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
+; (add-hook 'after-init-hook 'toggle-fullscreen)
 
 ;; start in an empty buffer instead of the help screen
 (defun create-empty-buffer ()
@@ -141,7 +228,6 @@
 (setf inhibit-splash-screen t)
 ;; no longer want to start in empty buffer because I load desktops
 ;;(switch-to-buffer (get-buffer-create "empty"))
-(global-set-key (kbd "M-n") 'create-empty-buffer)
 ;;(delete-other-windows)
 
 ;; display the column number
@@ -161,14 +247,31 @@
 (setq ido-everywhere t)
 (ido-mode 1)
 
-;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
-(global-set-key (kbd "C-t") 'goto-line)
-
 ;; set enter to be new line and indent by default in prog modes
 (add-hook 'prog-mode-hook (lambda ()  (local-set-key (kbd "RET") 'newline-and-indent)))
 
 ;; automatically delete trailing whitespace before save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; line wrap on long lines
+;(set-fill-column 80)
+;(global-visual-line-mode t)
+
+;; scroll constant number of lines at a time (less "jumpy" than defaults)
+(setq mouse-wheel-scroll-amount '(5 ((shift) . 1))) ;; five lines at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(setq scroll-step 1) ;; keyboard scroll one line at a time
+
+;; store all backup files "*~" in a central location
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup")))
+
+;; ;; highlight all TODOs
+;; (add-hook 'prog-mode-hook 'highlight-todos)
+
+;;;;;;;;;;;;;;;;
+;; Functions to be keybound
+;;;;;;;;;;;;;;;
 
 ;; auto-indent yanked text
 (defun yank-and-indent ()
@@ -191,7 +294,7 @@
 		 (list (line-beginning-position) (line-end-position))))
   (comment-or-uncomment-region begin end)
   ;; (next-line)
-)
+  )
 (global-set-key (kbd "C-,") 'comment-or-uncomment-region-or-line)
 
 ;; kill block or line
@@ -202,13 +305,31 @@
   (kill-region begin end))
 (global-set-key (kbd "C-M-<backspace>") 'kill-region-or-line)
 
-;; line wrap on long lines
-;(set-fill-column 80)
-;(global-visual-line-mode t)
+;;;;;;;;;;;;;;;;
+;; Keybindings
+;;;;;;;;;;;;;;;;
+
+;; smex
+(global-set-key "\M-x" 'smex)
+(global-set-key "\M-X" 'smex-major-mode-commands)
+(global-set-key "\C-c \C-c \M-x" 'execute-extended-command) ; the old M-x
+
+;; undo-tree redo
+(global-set-key (kbd "C-.") 'undo-tree-redo)
+
+;; set GOTO line to C-t. This overwrites the default function of transpose which frankly seems mostly useless. Generally you'll just delete the switched letters
+(global-set-key (kbd "C-t") 'goto-line)
+
+;; I hate C-x f, I don't want to change the width....
+(global-unset-key (kbd "C-x f"))
+(global-set-key (kbd "C-x f") 'find-file)
+
+(global-set-key (kbd "M-n") 'create-empty-buffer)
 
 ;; add keyboard shortcuts for easily cycling between buffers
-;(global-set-key (kbd "C-;") 'previous-buffer)
-;(global-set-key (kbd "C-'") 'next-buffer)
+;;(global-set-key (kbd "C-;") 'previous-buffer)
+;;(global-set-key (kbd "C-'") 'next-buffer)
+
 
 ;;;;;;;;;;;;;;;;
 ;; OS X specific
@@ -224,14 +345,15 @@
 ;; Personal libs
 ;;;;;;;;;;;;;;;;
 
-(load "~/.emacs.d/lib/buffer-cycle/buffer-cycle.el")
-(setq bc-use-popup nil)
-(bc-set-next-prev-keybinds (kbd "C-;") (kbd "C-'"))
-(bc-set-kill-keybind (kbd "C-k"))
-;(bc-set-next-prev-keybinds '(control \;) '(control \') )
-;(bc-set-next-prev-keybinds [?\C-\;] [?\C-\'] )
+; (load "~/.emacs.d/lib/buffer-cycle/buffer-cycle.el")
+; (setq bc-use-popup nil)
+; (bc-set-next-prev-keybinds (kbd "C-;") (kbd "C-'"))
+; (bc-set-kill-keybind (kbd "C-k"))
+; ;(bc-set-next-prev-keybinds '(control \;) '(control \') )
+; ;(bc-set-next-prev-keybinds [?\C-\;] [?\C-\'] )
 
-(load "~/.emacs.d/lib/session-manager/session-manager.el")
+
+;; (load "~/.emacs.d/lib/session-manager/session-manager.el")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
